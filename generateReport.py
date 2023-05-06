@@ -68,7 +68,7 @@ class GenerateReport():
             "litecoin": "ltcb"
         }
 
-        binance_data = get_binance.getDataFromBinance("bnbb")
+        binance_data = get_binance.getDataFromBinance(coin_dict[coin])
 
         print("get binance history data")
 
