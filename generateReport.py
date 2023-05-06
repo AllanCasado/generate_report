@@ -61,6 +61,12 @@ class GenerateReport():
         # get binance historical data
         get_binance = GetBinanceData(api_key=api_key_binance,
                                     api_secret=api_secret_binance)
+        
+        coin_dict = {
+            "bitcoin":"btcb",
+            "ethereum": "ethb",
+            "litecoin": "ltcb"
+        }
 
         binance_data = get_binance.getDataFromBinance("bnbb")
 
