@@ -4,7 +4,12 @@ class GetGPTSummaries():
     def __init__(self, api_key):
         self.api_key = api_key
 
-
+    #takes a list of news texts as input and uses OpenAI's GPT-3.5 model 
+    #to generate summaries and key insights for each news text. The method iterates 
+    #over each news text and creates a chat completion request to the GPT-3.5 model 
+    #with the user role and the text to be summarized. The method then extracts the 
+    #summary from the response and appends it to a list. Finally, the method returns 
+    #the list of summaries.
     def getGPTSummaries(self, news_text):
         openai.api_key = self.api_key
         summaries = []

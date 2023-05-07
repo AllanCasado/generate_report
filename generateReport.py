@@ -5,6 +5,7 @@ from getWordCloud import GetWordCloud
 from getBinanceHistData import GetBinanceData
 from getExchangesPrices import GetExchangesPrices
 from getSentimentAnalysis import GetSentimentAnalysis
+from getRedditInfo import GetRedditInfo
 
 from dotenv import load_dotenv
 import json
@@ -17,7 +18,9 @@ class GenerateReport():
     def __init__(self):
         pass
 
-
+    #combine all data tools we have to generate a complete json
+    #containing all info generated. this json will be used by the front-end
+    #service
     def generateReport(self, coin):
 
         final_json = {}
@@ -26,10 +29,9 @@ class GenerateReport():
         api_key_openai = os.environ.get('API_KEY_OPENAI')
         api_key_binance = os.environ.get('API_KEY_BINANCE')
         api_secret_binance = os.environ.get('API_SECRET_BINANCE')
-
-        print(api_key_binance)
-        print(api_key_openai)
-        print(api_key_news)
+        api_clientid_reddit = os.environ.get('API_CLIENTID_REDDIT')
+        api_client_secret_reddit = os.environ.get('API_CLIENT_SECRET_REDDIT')
+        user_agent = os.environ.get('USER_AGENT')
 
         # get news
         get_news = GetNews(api_key_news)
@@ -37,12 +39,14 @@ class GenerateReport():
         news_array = get_news.getArrayOfNews(news_raw)
         news_texts = get_news.getTextOfNews(news_array)
 
+        print("get news")
 
         # get bow
         get_bow = GetBow()
         bows_raw = get_bow.getBowOfNews(news_texts)
         bows = [dict(bow) for bow in bows_raw]
 
+        print("get bow")
 
         # get wordclouds
         get_wordcloud = GetWordCloud()
@@ -57,16 +61,15 @@ class GenerateReport():
 
         print("get gpt summaries of news")
 
-
-        # get binance historical data
-        get_binance = GetBinanceData(api_key=api_key_binance,
-                                    api_secret=api_secret_binance)
-        
         coin_dict = {
             "bitcoin":"btcb",
             "ethereum": "ethb",
             "litecoin": "ltcb"
         }
+
+        # get binance historical data
+        get_binance = GetBinanceData(api_key=api_key_binance,
+                                    api_secret=api_secret_binance)
 
         binance_data = get_binance.getDataFromBinance(coin_dict[coin])
 
@@ -86,6 +89,14 @@ class GenerateReport():
 
         print("get sentiment analysis")
 
+        # get reddit info
+        get_reddit_info = GetRedditInfo(api_clientid_reddit,
+                                        api_client_secret_reddit,
+                                        user_agent)
+        reddit_posts = get_reddit_info.getRedditInfo("CryptoCurrency")
+        
+        print("get reddit headlines")
+
         # final json
         final_json = {
             'output': {
@@ -98,7 +109,8 @@ class GenerateReport():
                 'bow': bows,
                 'wordclouds': wordclouds,
                 'hist_data': binance_data,
-                'exchanges_prices': exchanges_prices
+                'exchanges_prices': exchanges_prices,
+                'reddit_posts': reddit_posts
             }
         }
 

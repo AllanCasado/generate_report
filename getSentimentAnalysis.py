@@ -4,7 +4,12 @@ class GetSentimentAnalysis():
     def __init__(self):
         pass
 
-
+    #method takes in a list of news article summaries and performs sentiment 
+    #analysis on each summary using the OpenAI GPT-3 API. It generates a sentiment 
+    #classification for each summary by creating a prompt using the GPT-3 API and 
+    #passing in the summary as input. The generated prompt instructs the API to classify 
+    #the sentiment in the input news summary. The method returns a list of 
+    #sentiment classifications, with one classification for each input summary.
     def sentimentalAnalysis(self, summaries):
         sentiment = []
         for summary in summaries:

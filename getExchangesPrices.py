@@ -5,8 +5,11 @@ class GetExchangesPrices():
     def __init__(self):
        pass
 
+    # sends a GET request to the CoinGecko API to retrieve information about a specific 
+    # cryptocurrency. It takes the cryptocurrency symbol as input and returns a JSON response 
+    # containing various information such as the current price, market capitalization, and 
+    # trading volume.
     def getAllData(self, coin):
-        # Define the endpoint URL and required parameters
         url = f"https://api.coingecko.com/api/v3/coins/{coin}"
         params = {
             "localization": "false",
@@ -16,19 +19,17 @@ class GetExchangesPrices():
             "developer_data": "false",
             "sparkline": "false"
         }
-        # Make a GET request to the API endpoint
         response = requests.get(url, params=params)
-        # Check if the request was successful
         if response.status_code == 200:
-            # Extract the JSON response from the API
             json_response = response.json()
-            # Do something with the JSON response
             return json_response
         else:
-            # Handle the error condition
             print("API request failed with status code:", response.status_code)
 
-    
+    #retrieves the exchange prices of a given cryptocurrency by calling the getAllData 
+    #method to get the ticker information, filtering out the necessary data, and returning 
+    #it as a list of dictionaries. It returns the base currency, target currency, exchange name, 
+    #last traded price, volume, and trust score of each ticker.
     def getExchangesPrices(self, coin):
         market = self.getAllData(coin)
 
@@ -45,19 +46,3 @@ class GetExchangesPrices():
                         for ticker in tickers]
         
         return filtered_data
-
-
-# market = func1(coin)
-# data = market
-# # Extract the "tickers" information
-# tickers = data['tickers']
-# # Print the list of tickers
-# print(tickers)
-# filtered_data = [{"base": ticker.get("base"),
-#                 "target": ticker.get("target"),
-#                 "market": ticker.get("market", {}).get("name"),
-#                 "last": ticker.get("last"),
-#                 "volume": ticker.get("volume"),
-#                 "trustScore": ticker.get("trust_score")} 
-#                 for ticker in tickers]
-# print(filtered_data)
