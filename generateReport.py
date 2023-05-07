@@ -5,7 +5,6 @@ from getWordCloud import GetWordCloud
 from getBinanceHistData import GetBinanceData
 from getExchangesPrices import GetExchangesPrices
 from getSentimentAnalysis import GetSentimentAnalysis
-from getRedditInfo import GetRedditInfo
 
 from dotenv import load_dotenv
 import json
@@ -29,9 +28,6 @@ class GenerateReport():
         api_key_openai = os.environ.get('API_KEY_OPENAI')
         api_key_binance = os.environ.get('API_KEY_BINANCE')
         api_secret_binance = os.environ.get('API_SECRET_BINANCE')
-        api_clientid_reddit = os.environ.get('API_CLIENTID_REDDIT')
-        api_client_secret_reddit = os.environ.get('API_CLIENT_SECRET_REDDIT')
-        user_agent = os.environ.get('USER_AGENT')
 
         # get news
         get_news = GetNews(api_key_news)
@@ -89,15 +85,8 @@ class GenerateReport():
 
         print("get sentiment analysis")
 
-        # get reddit info
-        get_reddit_info = GetRedditInfo(api_clientid_reddit,
-                                        api_client_secret_reddit,
-                                        user_agent)
-        reddit_posts = get_reddit_info.getRedditInfo("CryptoCurrency")
+    
         
-        print("get reddit headlines")
-
-        # final json
         final_json = {
             'output': {
                 'news': {
@@ -110,7 +99,6 @@ class GenerateReport():
                 'wordclouds': wordclouds,
                 'hist_data': binance_data,
                 'exchanges_prices': exchanges_prices,
-                'reddit_posts': reddit_posts
             }
         }
 
